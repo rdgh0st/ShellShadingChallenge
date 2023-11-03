@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://matxliwxg8xg"]
+
+[ext_resource type="Shader" path="res://Shaders/Shell.gdshader" id="1_ewwuy"]
+[ext_resource type="Script" path="res://Scripts/Shell.gd" id="2_eq40s"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_susu5"]
+render_priority = 0
+shader = ExtResource("1_ewwuy")
+shader_parameter/ShellIndex = null
+shader_parameter/ShellCount = null
+shader_parameter/ShellLength = null
+shader_parameter/Density = null
+shader_parameter/NoiseMin = null
+shader_parameter/NoiseMax = null
+shader_parameter/Thickness = null
+shader_parameter/ShellDistanceAttenuation = null
+shader_parameter/Curvature = null
+shader_parameter/DisplacementStrength = null
+shader_parameter/ShellColor = null
+shader_parameter/Attenuation = null
+shader_parameter/OcclusionBias = null
+
+[sub_resource type="SphereMesh" id="SphereMesh_28krk"]
+material = SubResource("ShaderMaterial_susu5")
+
+[node name="ShellParent" type="MeshInstance3D"]
+mesh = SubResource("SphereMesh_28krk")
+script = ExtResource("2_eq40s")
+ShellCount = 32
+ShellLength = 0.15
+DistanceAttenuation = 1.0
+Density = 20.0
+NoiseMax = 1.0
+Thickness = 3.53
+Curvature = 1.0
+DisplacementStrength = 0.1
+Attenuation = 2.04
+ShellColor = Color(0.121569, 0.701961, 0.160784, 1)

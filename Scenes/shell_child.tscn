@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://cvosjnfo2gomb"]
+
+[ext_resource type="Shader" path="res://Shaders/Shell.gdshader" id="1_ojnno"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oha40"]
+render_priority = 0
+shader = ExtResource("1_ojnno")
+shader_parameter/ShellIndex = null
+shader_parameter/ShellCount = null
+shader_parameter/ShellLength = null
+shader_parameter/Density = null
+shader_parameter/NoiseMin = null
+shader_parameter/NoiseMax = null
+shader_parameter/Thickness = null
+shader_parameter/ShellDistanceAttenuation = null
+shader_parameter/Curvature = null
+shader_parameter/DisplacementStrength = null
+shader_parameter/ShellColor = null
+shader_parameter/Attenuation = null
+shader_parameter/OcclusionBias = null
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_3ealj"]
+material = SubResource("ShaderMaterial_oha40")
+
+[node name="ShellChild" type="MeshInstance3D"]
+mesh = SubResource("PlaneMesh_3ealj")
