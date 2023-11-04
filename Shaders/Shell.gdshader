@@ -15,6 +15,7 @@ uniform vec3 ShellColor: source_color;
 uniform float Attenuation;
 uniform float OcclusionBias;
 global uniform vec3 ShellDirection;
+uniform sampler2D PerlinNoise;
 
 //test
 
@@ -54,6 +55,8 @@ void fragment() {
 	uint seed = uint(newUV.x) + 100u * uint(newUV.y) + 100u * 10u;
 	
 	float rand = mix(NoiseMin, NoiseMax, hash(seed));
+	//rand = mix(NoiseMin, NoiseMax, texture(PerlinNoise, localUV).r);
+	rand = texture(PerlinNoise, UV).r;
 	float height = ShellIndex / ShellCount;
 	bool outsideThickness = (localDistFromCenter) > (Thickness * (rand - height));
 	if (outsideThickness && ShellIndex > 0.0) {

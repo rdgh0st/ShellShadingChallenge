@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bxgy2r84wplk"]
+[gd_scene load_steps=7 format=3 uid="uid://bxgy2r84wplk"]
 
 [ext_resource type="PackedScene" uid="uid://matxliwxg8xg" path="res://Scenes/shell_parent.tscn" id="1_63sap"]
 
@@ -15,7 +15,20 @@ sky = SubResource("Sky_p2rfs")
 tonemap_mode = 2
 glow_enabled = true
 
-[node name="Camera3D" type="Camera3D"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_gsihb"]
+noise_type = 3
+seed = 2134
+frequency = 0.005
+offset = Vector3(2.08167e-08, 2.08167e-08, 2.08167e-08)
+fractal_type = 3
+fractal_octaves = 8
+fractal_lacunarity = 1.5
+fractal_gain = 0.6
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_45i1m"]
+noise = SubResource("FastNoiseLite_gsihb")
+
+[node name="Node3D" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_074g4")
@@ -25,6 +38,14 @@ transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75
 shadow_enabled = true
 
 [node name="ShellParent" parent="." instance=ExtResource("1_63sap")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.72709)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.05833, -1.80801)
+ShellCount = 30
+ShellLength = 0.25
 Density = 300.0
-Thickness = 2.5
+Thickness = 20.0
+Curvature = 0.5
+ShellColor = Color(0.666667, 0.866667, 1, 1)
+NoiseTexture = SubResource("NoiseTexture2D_45i1m")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, -5.95416e-16, 2.4663e-16, 2.4663e-16, 0.707107, 0.707107, -5.95416e-16, -0.707107, 0.707107, 0, 0.694777, 0.335566)

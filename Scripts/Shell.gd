@@ -14,12 +14,14 @@ var ShellChild = preload("res://Scenes/shell_child.tscn");
 @export var Attenuation: float;
 @export var OcclusionBias: float;
 @export var ShellColor: Color;
+@export var NoiseTexture: Texture2D;
 
 var shells: Array;
 var displacementDirection: Vector3;
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
 	for i in ShellCount:
 		#set_instance_shader_parameter("ShellIndex", 100);
 		#print(get_instance_shader_parameter("ShellIndex"));
@@ -39,6 +41,7 @@ func _ready():
 		shaderMat.set_shader_parameter("ShellColor", ShellColor);
 		shaderMat.set_shader_parameter("Attenuation", Attenuation);
 		shaderMat.set_shader_parameter("OcclusionBias", OcclusionBias);
+		shaderMat.set_shader_parameter("PerlinNoise", NoiseTexture);
 		shells[i].set_surface_override_material(0, shaderMat);
 		add_child(shells[i]);
 		shells[i].set_owner(self);
