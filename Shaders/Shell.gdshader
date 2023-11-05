@@ -59,6 +59,7 @@ void vertex() {
 void fragment() {
 	vec2 newUV = UV * Density;
 	vec2 localUV = fract(newUV) * 2.0 - 1.0;
+	NORMAL = vec3(localUV.x, 0, localUV.y);
 	
 	float localDistFromCenter = length(localUV);
 	
@@ -84,4 +85,7 @@ void light() {
 	vec3 H = clamp(dot(NORMAL, LIGHT), 0.0, 1.0) * ATTENUATION * LIGHT_COLOR * 0.5 + 0.5;
 	H = H * H;
     DIFFUSE_LIGHT += H;
+	
+	vec3 HALF = (LIGHT + VIEW) / length(LIGHT + VIEW);
+	
 }
