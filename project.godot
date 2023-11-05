@@ -67,3 +67,7 @@ ShellDirection={
 "type": "vec3",
 "value": Vector3(0, 0, 0)
 }
+WindDirection={
+"type": "vec3",
+"value": Vector3(0, 0, 0)
+}

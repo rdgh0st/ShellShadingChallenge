@@ -14,8 +14,10 @@ uniform float DisplacementStrength;
 uniform vec3 ShellColor: source_color;
 uniform float Attenuation;
 uniform float OcclusionBias;
+uniform float NormalMovement;
+uniform float WindMovement;
 global uniform vec3 ShellDirection;
-uniform sampler2D PerlinNoise;
+global uniform vec3 WindDirection;
 
 //test
 
@@ -39,11 +41,19 @@ float hash(uint n) {
 
 
 void vertex() {
-	float height = ShellIndex / ShellCount;
-	height = pow(height, ShellDistanceAttenuation);
-	VERTEX += NORMAL * ShellLength * height;
-	float k = pow(height, Curvature);
-	VERTEX += ShellDirection * k * DisplacementStrength;
+	if (WindDirection == vec3(0, 0, 0)) {
+		float height = ShellIndex / ShellCount;
+		height = pow(height, ShellDistanceAttenuation);
+		VERTEX += NORMAL * ShellLength * height;
+		float k = pow(height, Curvature);
+		VERTEX += ShellDirection * k * DisplacementStrength;
+	} else {
+		vec3 localWindDirection = WindDirection - dot(WindDirection, NORMAL) * NORMAL;
+		VERTEX += NORMAL * NormalMovement;
+		VERTEX += localWindDirection * WindMovement;
+	}
+	
+	
 }
 
 void fragment() {
@@ -56,7 +66,7 @@ void fragment() {
 	
 	float rand = mix(NoiseMin, NoiseMax, hash(seed));
 	//rand = mix(NoiseMin, NoiseMax, texture(PerlinNoise, localUV).r);
-	rand = texture(PerlinNoise, UV).r;
+	//rand = texture(PerlinNoise, UV).r;
 	float height = ShellIndex / ShellCount;
 	bool outsideThickness = (localDistFromCenter) > (Thickness * (rand - height));
 	if (outsideThickness && ShellIndex > 0.0) {
