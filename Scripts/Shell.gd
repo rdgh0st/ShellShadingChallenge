@@ -57,7 +57,7 @@ func _process(delta):
 	RenderingServer.global_shader_parameter_set("WindSource", self.position - WindDirection);
 	
 	# WindIntensity modeled after a function with sharp incline and gradual falloff, adding a sin wave to give it the appearance of some randomness
-	WindIntensity = (2.0 / 1.67) * F((totalTime - 0.5) / 1.67) * P(10 * ((totalTime - 0.5) / 1.67)) + (sin(10 * totalTime) / 50.0);
+	WindIntensity = (2.0 / 1.67) * F((totalTime - 0.5) / 1.67) * P(10.0 * ((totalTime - 0.5) / 1.67)) + (sin(10.0 * totalTime) / 50.0);
 	WindIntensity /= 1.5;
 	
 	# Update shader parameters
@@ -79,8 +79,8 @@ func _process(delta):
 		shells[i].get_active_material(0).set_shader_parameter("TotalTime", totalTime);
 
 func erf(x):
-	return 1.1 / (1 + 0.01 * exp(-3.2 * x));
+	return 1.1 / (1.0 + 0.01 * exp(-3.2 * x));
 func P(x):
-	return 0.5 * (1 + erf(x / sqrt(2)))
+	return 0.5 * (1.0 + erf(x / sqrt(2.0)))
 func F(x):
-	return (exp(-0.5 * pow(x / 0.5 , 2))) / (0.5 * sqrt(2));
+	return (exp(-0.5 * pow(x / 0.5 , 2.0))) / (0.5 * sqrt(2.0));
