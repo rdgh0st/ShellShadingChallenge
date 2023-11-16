@@ -23,7 +23,7 @@ var totalTime: float;
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
+	totalTime = -2;
 	# IDEA: add/subract from Texture itself before sending it to shader
 	
 	for i in ShellCount:
@@ -62,6 +62,9 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	totalTime += delta;
+	if (totalTime >= 3):
+		totalTime = -2
+	
 	var velocity = 1.0;
 	var direction = Vector3(0, 0, 0);
 	var opposite = Vector3(0, 0, 0);
@@ -82,11 +85,27 @@ func _process(delta):
 		displacementDirection = displacementDirection.normalized();
 	
 	RenderingServer.global_shader_parameter_set("ShellDirection", displacementDirection);
-	RenderingServer.global_shader_parameter_set("WindDirection", Vector3(sin(totalTime), 0, 0));
+	RenderingServer.global_shader_parameter_set("WindDirection", WindDirection);
+	RenderingServer.global_shader_parameter_set("WindSource", self.position - WindDirection);
+	
+	#\sin^{2}\left(x\right)\ \frac{\sin\left(5x\right)}{2}+\ 0.5
+	#WindIntensity = (sin(totalTime) * sin(totalTime)) * (sin(5 * totalTime) / 2) + 0.5 + (sin(25 * totalTime) / 100);
+	
+	
+	WindIntensity = (2.0 / 1.67) * F((totalTime - 0.5) / 1.67) * P(10 * ((totalTime - 0.5) / 1.67)) + (sin(20 * totalTime) / 100.0);
+	WindIntensity /= 1.5;
+	
+	
 	for i in ShellCount:
 		#set_instance_shader_parameter("ShellIndex", 100);
 		#print(get_instance_shader_parameter("ShellIndex"));
 		#self.get_active_material(0)
+		#var normalMovement = 0;
+		#var windMovement = 0;
+		#for j in i:
+		#	var theta = (float(i) / float(ShellCount)) * (PI / 2) * WindIntensity;
+		#	normalMovement += ShellLength * cos(theta);
+		#	windMovement += ShellLength * sin(theta);
 		shells[i].get_active_material(0).set_shader_parameter("ShellCount", float(ShellCount));
 		shells[i].get_active_material(0).set_shader_parameter("ShellIndex", float(i));
 		shells[i].get_active_material(0).set_shader_parameter("ShellLength", ShellLength);
@@ -100,3 +119,14 @@ func _process(delta):
 		shells[i].get_active_material(0).set_shader_parameter("ShellColor", ShellColor);
 		shells[i].get_active_material(0).set_shader_parameter("Attenuation", Attenuation);
 		shells[i].get_active_material(0).set_shader_parameter("OcclusionBias", OcclusionBias);
+		shells[i].get_active_material(0).set_shader_parameter("WindIntensity", WindIntensity);
+		shells[i].get_active_material(0).set_shader_parameter("TotalTime", totalTime);
+		#shells[i].get_active_material(0).set_shader_parameter("NormalMovement", normalMovement);
+		#shells[i].get_active_material(0).set_shader_parameter("WindMovement", windMovement);
+
+func erf(x):
+	return 1.1 / (1 + 0.01 * exp(-3.2 * x));
+func P(x):
+	return 0.5 * (1 + erf(x / sqrt(2)))
+func F(x):
+	return (exp(-0.5 * pow(x / 0.5 , 2))) / (0.5 * sqrt(2));

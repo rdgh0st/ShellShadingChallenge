@@ -26,11 +26,12 @@ shadow_enabled = true
 
 [node name="ShellParent" parent="." instance=ExtResource("1_63sap")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.288137, -0.9387)
+mesh = null
 ShellCount = 30
 ShellLength = 0.003
 Density = 300.0
 WindIntensity = 0.4
-WindDirection = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
+WindDirection = Vector3(2, 0, 0)
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, -4.68079e-16, 3.27752e-16, 3.27752e-16, 0.939693, 0.34202, -4.68079e-16, -0.34202, 0.939693, 0, 0.694777, 0.335566)

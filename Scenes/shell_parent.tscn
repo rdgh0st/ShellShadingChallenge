@@ -1,8 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://matxliwxg8xg"]
+[gd_scene load_steps=5 format=3 uid="uid://matxliwxg8xg"]
 
+[ext_resource type="Shader" path="res://Shaders/Shell.gdshader" id="1_ewwuy"]
 [ext_resource type="Script" path="res://Scripts/Shell.gd" id="2_eq40s"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_susu5"]
+render_priority = 0
+shader = ExtResource("1_ewwuy")
+
+[sub_resource type="SphereMesh" id="SphereMesh_28krk"]
+material = SubResource("ShaderMaterial_susu5")
+
 [node name="ShellParent" type="MeshInstance3D"]
+mesh = SubResource("SphereMesh_28krk")
 script = ExtResource("2_eq40s")
 ShellCount = 32
 ShellLength = 0.15
