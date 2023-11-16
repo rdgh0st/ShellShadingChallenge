@@ -30,8 +30,6 @@ varying vec3 vert;
 varying vec3 currentVert;
 varying vec3 normal;
 
-//test
-
 float random( vec2 p )
 {
    // e^pi (Gelfond's constant)
@@ -50,6 +48,8 @@ float hash(uint n) {
 	return float(n & uint(0x7fffffffU)) / float(0x7fffffff);
 }
 
+// Calculates tangent after applying vertex transformation, that will be used by lighting updates
+// See Vertex shader for explanation of this process
 vec3 CalculateTangent() {
 	vec3 prevVert = vert;
 	float NormalMovement = 0.0;
@@ -73,7 +73,6 @@ vec3 CalculateTangent() {
 	}
 	
 	return currentVert - prevVert;
-	
 }
 
 void vertex() {
@@ -82,6 +81,7 @@ void vertex() {
 	distanceFromWind = pow(distance(VERTEX, WindSource), 2);
 	float NormalMovement = 0.0;
 	float WindMovement = 0.0;
+	// Formula for movement along normal and wind taken from paper -- we divide intensity by the distance to make it look less uniform
 	for (float j = 0.0; j < ShellIndex; j++) {
 		float theta = (ShellIndex / ShellCount) * (PI / 2.0) * (WindIntensity / distanceFromWind);
 		NormalMovement += ShellLength * cos(theta);
@@ -90,6 +90,7 @@ void vertex() {
 	// larger distance value, lower windintensity-- but little effect when value is close
 	// windintensity needs to stay between -1, 1
 	
+	// base case
 	if (WindDirection == vec3(0, 0, 0)) {
 		float height = ShellIndex / ShellCount;
 		height = pow(height, ShellDistanceAttenuation);
@@ -97,7 +98,9 @@ void vertex() {
 		float k = pow(height, Curvature);
 		VERTEX += ShellDirection * k * DisplacementStrength;
 	} else {
+		// blows perpindicular to object surface
 		vec3 localWindDirection = WindDirection - dot(WindDirection, NORMAL) * NORMAL;
+		// displace along normal and along the direction of the wind calculated above
 		VERTEX += NORMAL * NormalMovement;
 		VERTEX += localWindDirection * WindMovement;
 	}
@@ -115,8 +118,6 @@ void fragment() {
 	uint seed = uint(newUV.x) + 100u * uint(newUV.y) + 100u * 10u;
 	
 	float rand = mix(NoiseMin, NoiseMax, hash(seed));
-	//rand = mix(NoiseMin, NoiseMax, texture(PerlinNoise, localUV).r);
-	//rand = texture(PerlinNoise, UV).r;
 	float height = ShellIndex / ShellCount;
 	bool outsideThickness = (localDistFromCenter) > (Thickness * (rand - height));
 	if (outsideThickness && ShellIndex > 0.0) {
@@ -131,6 +132,7 @@ void fragment() {
 }
 
 void light() {
+	// use different normals for diffuse and specular factors as seen in paper
 	vec3 diffuseNormal = normalize(LIGHT - (dot(tangentForLight, LIGHT)) * tangentForLight);
 	vec3 H = clamp(dot(diffuseNormal, LIGHT), 0.0, 1.0) * ATTENUATION * LIGHT_COLOR * 0.5 + 0.5;
 	H = H * H;
@@ -138,8 +140,8 @@ void light() {
 	DIFFUSE_LIGHT *= (ShellIndex / ShellCount) * (1.0 - SelfShadowMin) + SelfShadowMin;
 	
 	vec3 HALF = normalize(LIGHT + VIEW);
-	vec3 newNormal = normalize(HALF - (dot(tangentForLight, HALF)) * tangentForLight);
+	vec3 specNormal = normalize(HALF - (dot(tangentForLight, HALF)) * tangentForLight);
 	
-	SPECULAR_LIGHT = pow(max(dot(HALF, newNormal), 0), Shininess) * ATTENUATION * LIGHT_COLOR;
+	SPECULAR_LIGHT = pow(max(dot(HALF, specNormal), 0), Shininess) * ATTENUATION * LIGHT_COLOR;
 	SPECULAR_LIGHT *= (ShellIndex / ShellCount) * (1.0 - SelfShadowMin) + SelfShadowMin;
 }

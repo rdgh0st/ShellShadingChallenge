@@ -27,9 +27,10 @@ shadow_enabled = true
 [node name="ShellParent" parent="." instance=ExtResource("1_63sap")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.288137, -0.9387)
 mesh = null
-ShellCount = 30
-ShellLength = 0.003
-Density = 300.0
+ShellCount = 100
+ShellLength = 0.001
+Density = 500.0
+Thickness = 5.0
 WindIntensity = 0.4
 WindDirection = Vector3(2, 0, 0)
 

@@ -6,6 +6,22 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_susu5"]
 render_priority = 0
 shader = ExtResource("1_ewwuy")
+shader_parameter/ShellIndex = null
+shader_parameter/ShellCount = null
+shader_parameter/ShellLength = null
+shader_parameter/Density = null
+shader_parameter/NoiseMin = null
+shader_parameter/NoiseMax = null
+shader_parameter/Thickness = null
+shader_parameter/ShellDistanceAttenuation = null
+shader_parameter/Curvature = null
+shader_parameter/DisplacementStrength = null
+shader_parameter/ShellColor = null
+shader_parameter/Attenuation = null
+shader_parameter/OcclusionBias = null
+shader_parameter/WindIntensity = null
+shader_parameter/CurrentStep = null
+shader_parameter/TotalTime = null
 
 [sub_resource type="SphereMesh" id="SphereMesh_28krk"]
 material = SubResource("ShaderMaterial_susu5")

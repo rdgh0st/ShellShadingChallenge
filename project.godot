@@ -18,6 +18,11 @@ config/icon="res://icon.svg"
 
 project/assembly_name="ShellShading"
 
+[editor]
+
+movie_writer/movie_file="C:/Users/rober/OneDrive/Documents/Godot Projects/ShellShading/ShellGrassDemo.avi"
+movie_writer/fps=120
+
 [input]
 
 Left={
